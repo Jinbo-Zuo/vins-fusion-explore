@@ -1,0 +1,19 @@
+
+运行 EuRoc 数据集指令说明：
+
+1. 首先打开一个终端执行 roscore
+2. 打开第二个终端执行   source ~/vins_fusion/catkin_ws/devel/setup.bash
+   或通过修改 .bashrc 文件
+
+3. 执行 roslaunch vins vins_rviz.launch
+   该命令用于打开 RViz 仿真环境
+
+4. 单目+IMU执行 rosrun vins vins_node ~/vins_fusion/catkin_ws/src/VINS-Fusion/config/euroc/euroc_mono_imu_config.yaml
+   双目+IMU执行 rosrun vins vins_node ~/vins_fusion/catkin_ws/src/VINS-Fusion/config/euroc/euroc_stereo_imu_config.yaml
+   载入相机、IMU模型
+
+5. 最后执行
+   rosbag play ~/vins_fusion/data/MH_01_easy.bag
+   rosbag play ~/vins_fusion/data/MH_04_difficult.bag
+   rosbag play ~/vins_fusion/data/MH_05_difficult.bag
+   载入数据并运行仿真程序

@@ -1,0 +1,115 @@
+
+首先，要保存运行结果，以便于使用 evo 工具包进行精度分析，修改如下：
+
+1. 	VINS-Mono/vins_estimator/src/utility/visualization.cpp
+	Line 160 - 168
+
+	原代码：
+	// write result to file
+	ofstream foutC(VINS_RESULT_PATH, ios::app);
+	foutC.setf(ios::fixed, ios::floatfield);
+	foutC.precision(0);
+	foutC << header.stamp.toSec() * 1e9 << ",";
+	foutC.precision(5);
+	foutC << estimator.Ps[WINDOW_SIZE].x() << ","
+		<< estimator.Ps[WINDOW_SIZE].y() << ","
+		<< estimator.Ps[WINDOW_SIZE].z() << ","
+		<< tmp_Q.w() << ","
+		<< tmp_Q.x() << ","
+		<< tmp_Q.y() << ","
+ 		<< tmp_Q.z() << ","
+		<< estimator.Vs[WINDOW_SIZE].X() << ","
+		<< ESTIMATOR.VS[WINDOW_SIZE].Y() << ","
+		<< ESTIMATOR.VS[WINDOW_SIZE].z() << "," << endl;
+	foutC.close();
+
+	修改后：
+	ofstream foutC(VINS_RESULT_PATH, ios::app);
+	foutC.setf(ios::fixed, ios::floatfield);
+	foutC.precision(0);
+	foutC << header.stamp.toSec() << " ";
+	foutC.precision(5);
+	foutC << estimator.Ps[WINDOW_SIZE].x() << " "
+	      << estimator.Ps[WINDOW_SIZE].y() << " "
+	      << estimator.Ps[WINDOW_SIZE].z() << " "
+	      << tmp_Q.x() << " "
+	      << tmp_Q.y() << " "
+	      << tmp_Q.z() << " "
+	      << tmp_Q.w() << endl;
+	foutC.close();
+
+
+2.	VINS-Fusion/loop_fusion/src/pose_graph_node.cpp
+	Line 458
+
+	原代码：
+    VINS_RESULT_PATH = VINS_RESULT_PATH + "/vio_loop.csv";
+
+	修改后：
+    VINS_RESULT_PATH = VINS_RESULT_PATH + "/vio_loop.txt";
+
+
+3.	VINS-Fusion/loop_fusion/src/pose_graph.cpp
+	Line 184 - 197
+	
+	原代码：
+	ofstream loop_path_file(VINS_RESULT_PATH, ios::app);
+	loop_path_file.setf(ios::fixed, ios::floatfield);
+	loop_path_file.precision(0);
+	loop_path_file << cur_kf->time_stamp * 1e9 << ",";
+	loop_path_file.precision(5);
+	loop_path_file  << P.x() << ","
+		<< P.y() << ","
+		<< P.z() << ","
+		<< Q.w() << ","
+		<< Q.x() << ","
+		<< Q.y() << ","
+		<< Q.z() << ","
+		<< endl;
+	loop_path_file.close();
+
+	修改后：
+	ofstream loop_path_file(VINS_RESULT_PATH, ios::app);
+	loop_path_file.setf(ios::fixed, ios::floatfield);
+	loop_path_file.precision(0);
+	loop_path_file << cur_kf->time_stamp << " ";
+	loop_path_file.precision(5);
+	loop_path_file  << P.x() << " "
+	      << P.y() << " "
+	      << P.z() << " "
+	      << Q.x() << " "
+	      << Q.y() << " "
+	      << Q.z() << " "
+	      << Q.w()
+	      << endl;
+	loop_path_file.close();
+
+
+	Line 831 - 844 修改同上
+
+
+4.	VINS-Fusion/config/euroc/euroc_stereo_imu_config.yaml
+	Line 11  修改 path 输出路径
+	LIne 70  修改 pose_graph 输出路径
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
